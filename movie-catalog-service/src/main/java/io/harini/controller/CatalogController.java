@@ -16,6 +16,13 @@ public class CatalogController {
 	
 	@GetMapping("/{id}")
 	public List<CatalogItem> getDetails(@PathVariable("id") String userId){
+		
+		// get all movie ids
+		
+		// get movie name and details for each movie 
+		
+		// put them all together 
+		
 		return Collections.singletonList(
 				new CatalogItem("Alice in Wonderland", "Goood", 5)
 				);
