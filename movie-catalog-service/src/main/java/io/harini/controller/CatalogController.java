@@ -1,6 +1,5 @@
 package io.harini.controller;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,11 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import io.harini.models.CatalogItem;
 import io.harini.models.InfoItem;
-import io.harini.models.Ratings;
+import io.harini.models.UserRatings;
 
 @RestController
 @RequestMapping("/catalog")
@@ -23,23 +21,18 @@ public class CatalogController {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	@Autowired
-	private WebClient.Builder webClientBuilder;
-	
 	@GetMapping("/{id}")
 	public List<CatalogItem> getDetails(@PathVariable("id") String userId){
 		
-		List<Ratings> ratings = Arrays.asList(new Ratings("1234",4), new Ratings("5678",3));
+		// get all movie ids
+		UserRatings ratings = restTemplate.getForObject("http://localhost:8083/ratingsdata/user/"+userId, UserRatings.class);
+		System.out.println(ratings);
 		
-		return ratings.stream().map(rating -> {
+		// get movie name and details for each movie id
+		return ratings.getUserRatings().stream().map(rating -> {
+			InfoItem movie = restTemplate.getForObject("http://localhost:8082/movies/"+rating.getMovieID(),InfoItem.class);
 			
-			InfoItem movie = webClientBuilder.build()
-					.get()
-					.uri("http://localhost:8082/movies/\"+rating.getMovieID()")
-					.retrieve()
-					.bodyToMono(InfoItem.class)
-					.block();
-			
+		// Put them all together
 			return new CatalogItem(movie.getMovieName(), "Goood", rating.getRating());
 		})
 		.collect(Collectors.toList());                     // to convert the result after iteration into a list
