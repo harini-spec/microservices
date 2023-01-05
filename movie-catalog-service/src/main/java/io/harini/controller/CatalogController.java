@@ -26,7 +26,6 @@ public class CatalogController {
 		
 		// get all movie ids
 		UserRatings ratings = restTemplate.getForObject("http://localhost:8083/ratingsdata/user/"+userId, UserRatings.class);
-		System.out.println(ratings);
 		
 		// get movie name and details for each movie id
 		return ratings.getUserRatings().stream().map(rating -> {
