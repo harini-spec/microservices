@@ -25,11 +25,11 @@ public class CatalogController {
 	public List<CatalogItem> getDetails(@PathVariable("id") String userId){
 		
 		// get all movie ids
-		UserRatings ratings = restTemplate.getForObject("http://localhost:8083/ratingsdata/user/"+userId, UserRatings.class);
+		UserRatings ratings = restTemplate.getForObject("http://ratings-data-service/ratingsdata/user/"+userId, UserRatings.class);
 		
 		// get movie name and details for each movie id
 		return ratings.getUserRatings().stream().map(rating -> {
-			InfoItem movie = restTemplate.getForObject("http://localhost:8082/movies/"+rating.getMovieID(),InfoItem.class);
+			InfoItem movie = restTemplate.getForObject("http://movie-info-service/movies/"+rating.getMovieID(),InfoItem.class);
 			
 		// Put them all together
 			return new CatalogItem(movie.getMovieName(), "Goood", rating.getRating());
