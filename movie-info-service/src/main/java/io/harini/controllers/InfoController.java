@@ -13,7 +13,8 @@ public class InfoController {
 	
 	@RequestMapping("{id}")
 	public InfoItem getInfo(@PathVariable("id") String movieId){
-		return new InfoItem(movieId,"Alice in Worderland");
+
+		return new InfoItem(movieId,"Avenger");
 	}
 
 }

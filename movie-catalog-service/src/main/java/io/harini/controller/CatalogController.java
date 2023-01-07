@@ -28,11 +28,12 @@ public class CatalogController {
 		UserRatings ratings = restTemplate.getForObject("http://ratings-data-service/ratingsdata/user/"+userId, UserRatings.class);
 		
 		// get movie name and details for each movie id
+		// wrap and unwrap happens here
 		return ratings.getUserRatings().stream().map(rating -> {
 			InfoItem movie = restTemplate.getForObject("http://movie-info-service/movies/"+rating.getMovieID(),InfoItem.class);
 			
 		// Put them all together
-			return new CatalogItem(movie.getMovieName(), "Goood", rating.getRating());
+			return new CatalogItem(movie.getMovieName(), "Fantasy movie", rating.getRating());
 		})
 		.collect(Collectors.toList());                     // to convert the result after iteration into a list
 	}
