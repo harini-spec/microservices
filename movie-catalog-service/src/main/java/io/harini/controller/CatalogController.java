@@ -33,7 +33,7 @@ public class CatalogController {
 			InfoItem movie = restTemplate.getForObject("http://movie-info-service/movies/"+rating.getMovieID(),InfoItem.class);
 			
 		// Put them all together
-			return new CatalogItem(movie.getMovieName(), "Fantasy movie", rating.getRating());
+			return new CatalogItem(movie.getMovieName(), movie.getDesc(), rating.getRating());
 		})
 		.collect(Collectors.toList());                     // to convert the result after iteration into a list
 	}
